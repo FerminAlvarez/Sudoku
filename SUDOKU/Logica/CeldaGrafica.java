@@ -1,6 +1,5 @@
 package Logica;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.DefaultComboBoxModel;
@@ -19,28 +18,14 @@ public class CeldaGrafica{
 		for (int i = 1; i<10; i++) {
 			modelo.addElement(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+i+".png")));
 		}
+		modelo.addElement(new ImageIcon(this.getClass().getResource("/Imagenes/Vacío.png")));
 		imagenes.setFocusable(false);
 		imagenes.setModel(modelo);
+		imagenes.setSelectedIndex(9);
 		iniciarOyente();
 		
 	}
 	
-	public CeldaGrafica(boolean celdaInicial, int valor) {
-		//Creamos un modelo para poner imagenes en un combobox
-		DefaultComboBoxModel<Icon> modelo = new DefaultComboBoxModel<Icon>();
-		if(celdaInicial) {
-			modelo.addElement(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+valor+".png")));
-			imagenes.setEnabled(false);
-		}else {
-			//Creamos el combobox con las 9 imagenes
-			for (int i = 1; i<10; i++) {
-				modelo.addElement(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+i+".png")));
-			}
-		}
-		imagenes.setFocusable(false);
-		imagenes.setModel(modelo);
-		iniciarOyente();
-	}
 	
 	public int getValor() {
 		return imagenes.getSelectedIndex();
@@ -49,14 +34,25 @@ public class CeldaGrafica{
 		return imagenes;
 	}
 	
+	public void setValor(int valor) {
+		imagenes.setSelectedIndex(valor-1);
+	}
+	public void setCeldaInicial() {
+		imagenes.setEnabled(false);
+	}
+	
+	
 	private void iniciarOyente() {
 		imagenes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				celda.actualizarValor(imagenes.getSelectedIndex()+1);
-				System.out.println(imagenes.getSelectedIndex()+1);
-				imagenes.setBackground(Color.orange);
+				if(imagenes.getSelectedIndex() == 9)
+					celda.setValor(-1);
+				else
+					celda.setValor(imagenes.getSelectedIndex()+1);
+				//imagenes.setBackground(Color.orange);
 			}
 		});
 	}
+	
 	
 }

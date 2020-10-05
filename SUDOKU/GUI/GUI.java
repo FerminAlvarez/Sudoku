@@ -57,10 +57,7 @@ public class GUI {
 		JPanel Panel1 = new JPanel();
 		Panel1.setBounds(10, 65, 617, 588);
 		frame.getContentPane().add(Panel1);
-		
 		Panel1.setLayout(new GridLayout(9, 9, 9, 9));
-		
-		
 		juego = new Juego(Panel1);
 
 	}
