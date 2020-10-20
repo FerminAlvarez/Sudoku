@@ -17,9 +17,9 @@ public class Juego {
 	private Celda[][] tablero;
 	private ArrayList<Celda> listaCeldasMal; //Lista que contendrá todas las celdas que contienen errores y las celdas que están vacías.
 	private boolean juegoInicializado = false;
-	private GUI gui;
+	private boolean gano;
 	
-	public Juego(JPanel Panel, GUI gui){
+	public Juego(JPanel Panel){
 		tablero = new Celda[9][9];
 		listaCeldasMal = new ArrayList<Celda>();
 		for(int fila = 0; fila<9; fila++) {
@@ -29,13 +29,12 @@ public class Juego {
 				Panel.add(celda.getCeldaGrafica().getComboBox());
 			}
 		}
-		this.gui = gui;
 		inicializarJuego();
 	}
 	
 	private void inicializarJuego() {
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir")+"\\SUDOKU\\EstadoInicial - copia.txt"));
+			BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.dir")+"\\SUDOKU\\EstadoInicial.txt"));
 			String lineaArchivo[];
 			int tableroAuiliar[][] = new int[9][9];
 			for (int fila = 0; fila < 9 ; fila++) {
@@ -72,8 +71,8 @@ public class Juego {
 	private boolean seEstablecioCeldaInicial(int fila, int columna,int valor) {
 		boolean establecer = false;
 		Random random = new Random();
-		int aleatorio = random.nextInt(99);
-		establecer = aleatorio < 98;
+		int aleatorio = random.nextInt(10);
+		establecer = aleatorio < 5;
 		if(establecer) {
 			tablero[fila][columna].setCeldaInicial();
 			tablero[fila][columna].inicializarValor(valor);
@@ -137,7 +136,7 @@ public class Juego {
 				
 			    if (listaCeldasMal.isEmpty()) {
 			    	System.out.println(listaCeldasMal.size());
-			    	cerrarJuegoGano();
+			    	gano = true;
 			    }
 			}
 		}
@@ -155,11 +154,8 @@ public class Juego {
 		JOptionPane.showMessageDialog(null,mensaje);
 		System.exit(0);
 	}
-	private void cerrarJuegoGano() {
-		int tiempo = gui.getTiempoYDetener();
-		int unidadMayor = tiempo/60;
-		int unidadMenor = tiempo%60;
-		JOptionPane.showMessageDialog(null,"Felicitaciones ha logrado pasar el juego\n Tiempo:  " +unidadMayor/10+unidadMayor%10+":"+unidadMenor/10+unidadMenor%10);
-		System.exit(0);
+	public boolean getGano() {
+		return gano;
 	}
+	
 }

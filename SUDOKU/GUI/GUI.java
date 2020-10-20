@@ -21,6 +21,7 @@ import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class GUI {
 	
@@ -71,7 +72,7 @@ public class GUI {
 		frame.getContentPane().add(Panel1);
 		Panel1.setLayout(new GridLayout(9, 9, 9, 9));
 		
-		juego = new Juego(Panel1,this);
+		juego = new Juego(Panel1);
 		
 		JLabel0 = new JLabel("");
 		JLabel0.setBounds(175, 11, 46, 43);
@@ -101,26 +102,30 @@ public class GUI {
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
-				establecerTiempo(tiempo++);
+				tiempo++;
+				establecerTiempo(tiempo/60,tiempo%60);
+				chequearEstadoDelJuego(tiempo/60,tiempo%60);
 			}
 			
 		};
 		timer.schedule(task, milisegundos,milisegundos);
 	}
 	
-	private void establecerTiempo(int tiempo) {
-		int unidadMayor  = tiempo / 60;
-		int unidadMenor =  tiempo % 60;
+	private void establecerTiempo(int unidadMayor,int unidadMenor) {
 		JLabel2.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+unidadMenor/10+".png")));
 		JLabel3.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+unidadMenor%10+".png")));
 		JLabel1.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+unidadMayor%10+".png")));
 		JLabel0.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+unidadMayor/10+".png")));
 	}
 	
-	public int getTiempoYDetener() {
-		timer.cancel();
-		return tiempo;
-		
+	
+	
+	private void chequearEstadoDelJuego(int unidadMayor,int unidadMenor){
+		if(juego.getGano()) {
+			timer.cancel();
+			JOptionPane.showMessageDialog(null,"Felicitaciones, ha logrado completar el sudoku. \n\n Tiempo:  "+unidadMayor/10+unidadMayor%10+ ":"+unidadMenor/10+unidadMenor%10);
+			
+		}
 	}
 	
 }
