@@ -31,7 +31,8 @@ public class GUI {
 	private JLabel JLabel1;
 	private JLabel JLabel2;
 	private JLabel JLabel3;
-	int tiempo = 0;
+	private Timer timer;
+	private int tiempo = 0;
 
 	/**
 	 * Launch the application.
@@ -70,29 +71,33 @@ public class GUI {
 		frame.getContentPane().add(Panel1);
 		Panel1.setLayout(new GridLayout(9, 9, 9, 9));
 		
-		juego = new Juego(Panel1);
+		juego = new Juego(Panel1,this);
 		
 		JLabel0 = new JLabel("");
 		JLabel0.setBounds(175, 11, 46, 43);
+		JLabel0.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero0.png")));
 		frame.getContentPane().add(JLabel0);
 		
 		JLabel1 = new JLabel("");
 		JLabel1.setBounds(220, 11, 46, 43);
+		JLabel1.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero0.png")));
 		frame.getContentPane().add(JLabel1);
 		
 		JLabel2 = new JLabel("");
 		JLabel2.setBounds(289, 11, 46, 43);
+		JLabel2.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero0.png")));
 		frame.getContentPane().add(JLabel2);
 		
 		JLabel3 = new JLabel("");
 		JLabel3.setBounds(336, 11, 46, 43);
+		JLabel3.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero0.png")));
 		frame.getContentPane().add(JLabel3);
-		iniciarTiempo();
+		iniciarTiempo(1000);
 
 	}
 	
-	private void iniciarTiempo() {
-		Timer timer = new Timer();
+	private void iniciarTiempo(int milisegundos) {
+		timer = new Timer();
 		TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
@@ -100,21 +105,21 @@ public class GUI {
 			}
 			
 		};
-		timer.schedule(task, 100,100);
+		timer.schedule(task, milisegundos,milisegundos);
 	}
 	
 	private void establecerTiempo(int tiempo) {
-		int minutos = tiempo / 60;
-		int segundos =  tiempo % 60;
-		establecerTiempo(minutos,segundos);
-		System.out.println(minutos+":"+segundos);
+		int unidadMayor  = tiempo / 60;
+		int unidadMenor =  tiempo % 60;
+		JLabel2.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+unidadMenor/10+".png")));
+		JLabel3.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+unidadMenor%10+".png")));
+		JLabel1.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+unidadMayor%10+".png")));
+		JLabel0.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+unidadMayor/10+".png")));
 	}
 	
-	private void establecerTiempo(int minutos, int segundos) {
-		JLabel2.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+segundos%100/10+".png")));
-		JLabel3.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+segundos%10+".png")));
-		JLabel1.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+minutos%10+".png")));
-		JLabel0.setIcon(new ImageIcon(this.getClass().getResource("/Imagenes/Numero"+minutos%100/10+".png")));
+	public int getTiempoYDetener() {
+		timer.cancel();
+		return tiempo;
 		
 	}
 	
