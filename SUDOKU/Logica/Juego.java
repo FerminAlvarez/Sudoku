@@ -1,13 +1,14 @@
 package Logica;
 
+import java.awt.Color;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Random;
 
+import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -25,6 +26,12 @@ public class Juego {
 				Celda celda = new Celda(fila,columna,this);
 				tablero[fila][columna] = celda;
 				Panel.add(celda.getCeldaGrafica().getComboBox());
+				if (fila%3 == 0 && columna%3 == 0)
+					celda.getCeldaGrafica().getComboBox().setBorder(BorderFactory.createMatteBorder(4,4, 1, 1, Color.DARK_GRAY));
+				else if (fila%3==0)
+					celda.getCeldaGrafica().getComboBox().setBorder(BorderFactory.createMatteBorder(4,1, 1, 1, Color.DARK_GRAY));
+				else if (columna%3==0)
+					celda.getCeldaGrafica().getComboBox().setBorder(BorderFactory.createMatteBorder(1,4, 1, 1, Color.DARK_GRAY));
 			}
 		}
 		inicializarJuego();
@@ -102,11 +109,12 @@ public class Juego {
 				//Primero lo eliminamos si estaba de la lista
 				if(!repetido)
 					listaCeldasMal.remove(tablero[fila][columna]);
-				if(repetido || tablero[fila][columna].getValor()==-1)
+				if(repetido || tablero[fila][columna].esCeldaVacia())
 					listaCeldasMal.add(tablero[fila][columna]);	
 				
 			}
-		
+
+		revisarLista();
 		return repetido;
 	}
 	
@@ -114,35 +122,31 @@ public class Juego {
 		LinkedList<Celda> listaErroresAuxiliar = new LinkedList<Celda>();
 		LinkedList<Celda> listaErroresEnCadena = new LinkedList<Celda>();
 		boolean repetido = false;
-		
 		//Primero revisamos para todos los que están en la lista si hubo cambios.
 		for(int indiceLista = 0; indiceLista<listaCeldasMal.size(); indiceLista++) {
 			Celda celda = listaCeldasMal.get(indiceLista);
 			int valor = celda.getValor();
 			//Si la lista está vacía siginifica que no hubo error con ninguna celda.
 			repetido = !estaRepetido(celda.getFila(), celda.getColumna(), valor).isEmpty();
-			if((repetido || valor == -1) && (!listaErroresAuxiliar.contains(celda))) 
+			if((repetido || celda.esCeldaVacia()) && (!listaErroresAuxiliar.contains(celda))) 
 				listaErroresAuxiliar.add(celda);
 			
 			celda.setError(repetido);
 		}
-		
-		
-		if(juegoInicializado) {
 			//Como ya sabemos que la ultima celda de listas celdas mal (A) está mal, para cada celda que (A) generó problemas las agregamos a la lista y les cambiamos el estado.
-			Celda ultimaCelda = listaCeldasMal.getLast();
-			listaErroresEnCadena = estaRepetido(ultimaCelda.getFila(), ultimaCelda.getColumna(), ultimaCelda.getValor());
-			for(int indiceLista = 0; indiceLista<listaErroresEnCadena.size(); indiceLista++) {
-				Celda celda = listaErroresEnCadena.get(indiceLista);
-				listaErroresAuxiliar.add(celda);
-				celda.setError(repetido);
+			if(!listaCeldasMal.isEmpty() && juegoInicializado) {
+				Celda ultimaCelda = listaCeldasMal.getLast();
+				listaErroresEnCadena = estaRepetido(ultimaCelda.getFila(), ultimaCelda.getColumna(), ultimaCelda.getValor());
+				for(int indiceLista = 0; indiceLista<listaErroresEnCadena.size(); indiceLista++) {
+					Celda celda = listaErroresEnCadena.get(indiceLista);
+					listaErroresAuxiliar.add(celda);
+					celda.setError(repetido);
+				}
 			}
-		}
-		
+			
 		listaCeldasMal = listaErroresAuxiliar;
 		if (listaCeldasMal.isEmpty() && juegoInicializado) 
 	    	gano = true;
-		
 	}
 	
 	
@@ -154,13 +158,13 @@ public class Juego {
 		LinkedList<Celda> listaAuxiliar = new LinkedList<Celda>();
 		for (int i = 0;  i<9; i ++) {
 			//Verificamos si está repetido y no es él mismo y no es celda vacía
-			if(tablero[i][columna].getValor()== valor && i != fila && valor != -1) 
+			if(tablero[i][columna].getValor()== valor && i != fila && !tablero[i][columna].esCeldaVacia()) 
 				listaAuxiliar.add(tablero[i][columna]);
 		}
 		
 		for (int i = 0;  i<9; i ++) {
 			//Verificamos si está repetido y no es él mismo y no es celda vacía
-			if(tablero[fila][i].getValor()== valor &&  i != columna && valor != -1) 
+			if(tablero[fila][i].getValor()== valor &&  i != columna && !tablero[fila][i].esCeldaVacia()) 
 				listaAuxiliar.add(tablero[fila][i]);
 		}
 		
@@ -170,7 +174,7 @@ public class Juego {
 		for(int i = filaInicialPanel; i< filaInicialPanel+3;i++) 
 			for(int e = columnaInicialPanel;e< columnaInicialPanel+3;e++) {
 				//Verificamos si está repetido y no es él mismo y no es celda vacía
-				if(tablero[i][e].getValor()== valor && e != columna && i != fila && valor != -1) 
+				if(tablero[i][e].getValor()== valor && e != columna && i != fila && !tablero[i][e].esCeldaVacia()) 
 					listaAuxiliar.add(tablero[i][e]);
 			}
 		return listaAuxiliar;
@@ -186,7 +190,7 @@ public class Juego {
 		boolean establecer = false;
 		Random random = new Random();
 		int aleatorio = random.nextInt(10);
-		establecer = aleatorio <3;
+		establecer = aleatorio <4;
 		if(establecer) {
 			tablero[fila][columna].setCeldaInicial();
 			tablero[fila][columna].inicializarValor(valor);

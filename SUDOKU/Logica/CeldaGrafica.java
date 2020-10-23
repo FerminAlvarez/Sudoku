@@ -29,11 +29,7 @@ public class CeldaGrafica{
 	}
 	
 	
-	public JComboBox<Icon> getComboBox(){
-		return imagenes;
-	}
-	
-	public void setValor(int valor) {
+	public void setImagen(int valor) {
 		if(valor ==-1)
 			imagenes.setSelectedIndex(9);
 		else
@@ -52,9 +48,7 @@ public class CeldaGrafica{
 				if(imagenes.getSelectedIndex() == 9)
 					celda.setValor(-1);
 				else 
-					celda.setValor(imagenes.getSelectedIndex()+1);
-				
-				
+					celda.setValor(imagenes.getSelectedIndex()+1);				
 			}
 		});
 	}
@@ -64,6 +58,10 @@ public class CeldaGrafica{
 			imagenes.setBackground(Color.orange);
 		else 
 			imagenes.setBackground(Color.white);
+	}
+	
+	public JComboBox<Icon> getComboBox(){
+		return imagenes;
 	}
 	
 	

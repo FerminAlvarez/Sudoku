@@ -113,7 +113,7 @@ public class GUI {
 		if(juego.getGano()) {
 			timer.cancel();
 			JOptionPane.showMessageDialog(null,"Felicitaciones, ha logrado completar el sudoku. \n\n Tiempo:  "+unidadMayor/10+unidadMayor%10+ ":"+unidadMenor/10+unidadMenor%10);
-			
+			System.exit(0);
 		}
 	}
 	

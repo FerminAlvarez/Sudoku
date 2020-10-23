@@ -19,20 +19,17 @@ public class Celda {
 		return this.celdaGrafica;
 	}
 	
-	
-	
 	//Método que solamente utilizamos en el momento de inicializar las celdas.
 	public void inicializarValor(int valor) {
 		this.valor= valor;
-		celdaGrafica.setValor(valor);
+		celdaGrafica.setImagen(valor);
 	}
 	
 	public void setValor(int valor) {
 		this.valor= valor;
 		celdaGrafica.setearCeldaError(juego.contieneErrores(fila, columna, valor));
-		juego.revisarLista();
-		celdaGrafica.setValor(valor);
 	}
+	
 	public void setError(boolean tieneError) {
 		celdaGrafica.setearCeldaError(tieneError);
 	}
@@ -49,9 +46,12 @@ public class Celda {
 		return columna;
 	}
 	
-	
 	public void setCeldaInicial() {
 		celdaGrafica.setCeldaInicial();
+	}
+	
+	public boolean esCeldaVacia() {
+		return valor == -1;
 	}
 	
 
