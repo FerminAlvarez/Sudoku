@@ -26,7 +26,6 @@ public class CeldaGrafica{
 		imagenes.setSelectedIndex(9);
 		imagenes.setBackground(Color.white);
 		iniciarOyente();
-		
 	}
 	
 	

@@ -1,25 +1,13 @@
 package GUI;
 
 import java.awt.EventQueue;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import Logica.Celda;
 import Logica.Juego;
-
 import java.awt.GridLayout;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
-import java.awt.Color;
-
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -63,6 +51,7 @@ public class GUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setResizable(false);
 		frame.setBounds(100, 100, 653, 703);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
