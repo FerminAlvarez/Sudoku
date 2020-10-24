@@ -182,8 +182,16 @@ public class Juego {
 	
 	
 	private void chequearFila(String[] arreglo) throws InicializacionException{
+		boolean error = false;
+		Integer entero;
 		if(arreglo.length!=9)
-			throw new InicializacionException("Alguna linea del archivo no cuenta con el formato especificado.");
+			error = true;
+		for(int i = 0; !error && i<9;i++) {
+			entero = Integer.parseInt(arreglo[i]);
+			error = !(entero>0&&entero<10);
+		}
+		if(error)
+			throw new InicializacionException("El archivo tiene algún valor que no es del 1 al 9 o no tiene nueve columnas.");
 	}
 	
 	private boolean seEstablecioCeldaInicial(int fila, int columna,int valor) {
